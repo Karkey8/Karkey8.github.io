@@ -1,20 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Click Yes or Regret Forever</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hi Deepika :)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    .question {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    .option-btn {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 30px;
+      background: #ff69b4;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .option-btn:hover {
+      background: #ff1493;
+    }
+    .floating-no {
+      position: absolute;
+      background: #999;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      animation: floatNo 2s infinite linear;
+    }
+    @keyframes floatNo {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(150px, 0); }
+      50% { transform: translate(150px, 100px); }
+      75% { transform: translate(0, 100px); }
+      100% { transform: translate(0, 0); }
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <h2 class="question">Karkey's algorithm say we're 99% compatible. Wanna test it?</h2>
-  <img class="gif" alt="gif" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjJvdWZzYXc1NGJ6aGp1cDE3b2dyNnVzOGN1andkMjVrMmRzeGwwZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3OhXBaoR1tVPW/giphy.gif" />
-  <div class="btn-group">
-    <button class="yes-btn">Yes, Let's do this!</button>
-    <button class="no-btn"></button>
+  <div class="container" id="gameContainer">
+    <h2 class="question" id="questionText">Hi Deepika 😊 Ready for a fun little game?</h2>
+    <button class="option-btn" onclick="startGame()">Yes, show me!</button>
   </div>
-</div>
-<script src="script.js"></script>
+
+  <script>
+    const questions = [
+      {
+        text: "Do I make you smile with my cheesy jokes? 😄",
+        options: [
+          { text: "Totally, you're hilarious!", next: 1, points: 10 },
+          { text: "Maybe a little!", next: 1, points: 5 }
+        ]
+      },
+      {
+        text: "Would you love a cozy dinner date with me? 🍽️",
+        options: [
+          { text: "Sounds dreamy!", next: 2, points: 10 },
+          { text: "Could be fun!", next: 2, points: 5 }
+        ]
+      },
+      {
+        text: "Do you think I'm kinda charming? 😉",
+        options: [
+          { text: "Absolutely!", next: 3, points: 10 },
+          { text: "You’re alright 😜", next: 3, points: 5 }
+        ]
+      },
+      {
+        text: "Will You Date Karthik? 🌅",
+        options: [
+          { text: "I’d love that!", next: 4, points: 10 },
+          { text: "No i need to think about that!", next: 4, points: 5 }
+        ]
+      },
+      {
+        text: "So... when are we going on that date? 💖",
+        options: [
+          { text: "Yes, let’s go soon!", next: null, points: 10 },
+          { text: "No", next: null, points: 0, floating: true }
+        ]
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function startGame() {
+      showQuestion(current);
+    }
+
+    function showQuestion(index) {
+      const container = document.getElementById('gameContainer');
+      const q = questions[index];
+      container.innerHTML = `<h2 class="question">${q.text}</h2>`;
+      q.options.forEach(option => {
+        if (option.floating) {
+          const noBtn = document.createElement('button');
+          noBtn.className = 'option-btn floating-no';
+          noBtn.innerText = option.text;
+          noBtn.onclick = () => alert("Nice try 😏 You can only choose yes!");
+          container.appendChild(noBtn);
+        } else {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.innerText = option.text;
+          btn.onclick = () => {
+            score += option.points;
+            if (option.next === null) {
+              showFinal();
+            } else {
+              showQuestion(option.next);
+            }
+          };
+          container.appendChild(btn);
+        }
+      });
+    }
+
+    function showFinal() {
+      document.getElementById('gameContainer').innerHTML = `
+        <h2 class="question">You said YES! 🥰</h2>
+        <p style="margin-top: 15px; font-size: 1.2rem;">Now you’re officially not allowed to escape a date with me 😉<br><br>So when should i come and pick u up? </p>
+      `;
+    }
+  </script>
 </body>
 </html>
